@@ -29,3 +29,18 @@ The `/res`-folder contains images and several resources to learn about the compo
 The `/freecad`-folder contains 3D models as  `.stl` files. Included are models for the gondola, weight-mounts, motor mounts, a case for the control unit and mounts that go directly onto the whiteboard.  
 Everything connected to the firmware is located in the `/firmware`-folder. This includes test scripts to examine if every part works as intended. The `config.h` file must be modified with the parameters of your specific case.
 
+
+
+### Possible Future Improvements
+##### PCB
+- More labels
+- Altered Capacitor and 12V plug connectors
+
+#### 3D models
+- Motor mount additions
+
+
+### TODO:
+- Tidy up repo
+- Add pictures and guide
+- Develop code
