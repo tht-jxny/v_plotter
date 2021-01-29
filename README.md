@@ -30,6 +30,9 @@ The `/freecad`-folder contains 3D models as  `.stl` files. Included are models f
 Everything connected to the firmware is located in the `/firmware`-folder. This includes test scripts to examine if every part works as intended. The `config.h` file must be modified with the parameters of your specific case.
 
 
+### Assembly
+
+
 
 ### Possible Future Improvements
 ##### PCB
@@ -38,6 +41,8 @@ Everything connected to the firmware is located in the `/firmware`-folder. This 
 
 #### 3D models
 - Motor mount additions
+- Move motor axle further away from drawing surface
+- Design upper PCB case
 
 
 ### TODO:

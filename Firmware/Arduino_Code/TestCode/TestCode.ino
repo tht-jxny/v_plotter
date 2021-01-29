@@ -4,16 +4,16 @@ Servo myservo;    // erzeugt ein Servomotor-Objekt
 
 int pos = 0;      // Variable, die die Servoposition (Winkel) speichert
 
-uint8_t leftStepPin = 23;
-uint8_t leftDirPin = 19;
+uint8_t leftStepPin = 5;
+uint8_t leftDirPin = 23;
 
-uint8_t rightStepPin = 21;
-uint8_t rightDirPin = 22;
+uint8_t rightStepPin = 19;
+uint8_t rightDirPin = 18;
 
 int servoPin = 26;
 
 int steps = 4000; // you should increase this if you are using
-                  // some of microstepping modes
+                  // some of microstepping modes : 8000 steps translate to 7.5 cm movement
 int usDelay = 950;// minimal is 950 for full step mode and NEMA15 motor
                   // minimal is 35 for sixteenth step mode
 
@@ -33,34 +33,34 @@ void loop() {
   
   digitalWrite(leftDirPin, HIGH); // motor direction cw
   Serial.println("Left Motor Clockwise");
-  for(int x = 0; x < steps; x++) {
+  for(int x = 0; x < steps*2; x++) {
     digitalWrite(leftStepPin, HIGH);
-    delayMicroseconds(usDelay);
+    delayMicroseconds(usDelay/5);
     digitalWrite(leftStepPin, LOW);
-    delayMicroseconds(usDelay);
+    delayMicroseconds(usDelay/5);
   }
   delay(1000);
   digitalWrite(leftDirPin, LOW); // motor direction ccw
   Serial.println("Left Motor Counterclockwise");
-  for(int x = 0; x < steps; x++) {
+  for(int x = 0; x < steps*2; x++) {
     digitalWrite(leftStepPin, HIGH);
-    delayMicroseconds(usDelay);
+    delayMicroseconds(usDelay/5);
     digitalWrite(leftStepPin, LOW);
-    delayMicroseconds(usDelay);
+    delayMicroseconds(usDelay/5);
   }
   delay(1000);
   digitalWrite(rightDirPin, HIGH); // motor direction cw
   Serial.println("Right Motor Clockwise");
-  for(int x = 0; x < (steps*10); x++) {
+  for(int x = 0; x < (steps*2); x++) {
     digitalWrite(rightStepPin, HIGH);
-    delayMicroseconds(usDelay/10);
+    delayMicroseconds(usDelay/5);
     digitalWrite(rightStepPin, LOW);
-    delayMicroseconds(usDelay/10);
+    delayMicroseconds(usDelay/5);
   }
   delay(1000);
   digitalWrite(rightDirPin, LOW); // motor direction ccw
   Serial.println("Right Motor Counterclockwise");
-  for(int x = 0; x < steps; x++) {
+  for(int x = 0; x < steps*2; x++) {
     digitalWrite(rightStepPin, HIGH);
     delayMicroseconds(usDelay/5);
     digitalWrite(rightStepPin, LOW);
