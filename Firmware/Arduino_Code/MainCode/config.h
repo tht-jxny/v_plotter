@@ -14,11 +14,14 @@ const int PIN_SERVO = 26;
 const int SERVO_ANGLE_PEN_UP = 0;
 const int SERVO_ANGLE_PEN_DOWN = 90;
 
-// Delay between two motor movements (>35 for sixteenth step mode; >950 for full step mode):
-const int MOTOR_DELAY = 300;
 
 // Number of steps that translate to a 1 mm movement (needs to be measured):
 const int STEP_DISTANCE = 108;
+
+// Speed (v_max for plotting process); In my case: 15 mm/s to 25 mm/s is pretty good
+const float SPEED = 20; // Measured in mm/s
+const float STEPS_PER_SECOND = SPEED * STEP_DISTANCE;
+// Delay between two motor movements should be >35 for sixteenth step mode; >950 for full step mode
 
 // Scale factor to scale given coordinates:
 const int COORDINATE_SCALE = 1;
@@ -27,7 +30,7 @@ const int COORDINATE_SCALE = 1;
 const int MOTOR_AXLE_DISTANCE = 532;
 
 // Length of both tooth belts in millimetres when in origin position:
-const int LEFT_STANDARD_LENGTH = 185;
+const int LEFT_STANDARD_LENGTH = 180;
 const int RIGHT_STANDARD_LENGTH = 430;
 
 // Size of canvas in millimetres:

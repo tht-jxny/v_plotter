@@ -7,6 +7,8 @@ float current_left_length = LEFT_STANDARD_LENGTH;
 float current_right_length = RIGHT_STANDARD_LENGTH;
 float target_left_length = LEFT_STANDARD_LENGTH; // Maybe obsolete
 float target_right_length = RIGHT_STANDARD_LENGTH; // Maybe obsolete
+int left_addition_factor = 0;
+int right_addition_factor = 0;
 
 
 Servo lift_servo; // Creats servo object
@@ -38,50 +40,51 @@ void calculate_belt_lengths(float x, float y){
 }
 
 void move_to() {
-  if ((target_left_length < 600) and (target_right_length < 600)){
-  while ((int(target_left_length) != int(current_left_length)) && (int(target_right_length) != int(current_right_length))){
-    for(int x = 0; x < STEP_DISTANCE; x++) {
-  // Movement for left motor (cw means decreasing length of tooth belt):
-  if (target_left_length > current_left_length) {
-    digitalWrite(PIN_LEFT_DIR, LOW); // motor direction ccw
-    digitalWrite(PIN_LEFT_STEP, HIGH);
-    delayMicroseconds(MOTOR_DELAY);
-    digitalWrite(PIN_LEFT_STEP, LOW);
-    delayMicroseconds(MOTOR_DELAY);
-    current_left_length = current_left_length + (1/STEP_DISTANCE) ;
-  } else if (target_left_length < current_left_length) {
-    digitalWrite(PIN_LEFT_DIR, HIGH); // motor direction cw
-    digitalWrite(PIN_LEFT_STEP, HIGH);
-    delayMicroseconds(MOTOR_DELAY);
-    digitalWrite(PIN_LEFT_STEP, LOW);
-    current_left_length = current_left_length - (1/STEP_DISTANCE);
-  }
-  // Movement for right motor (cw means increasing length of tooth belt):
-  if (target_right_length > current_right_length) {
-    digitalWrite(PIN_RIGHT_DIR, HIGH); // motor direction cw
-    digitalWrite(PIN_RIGHT_STEP, HIGH);
-    delayMicroseconds(MOTOR_DELAY);
-    digitalWrite(PIN_RIGHT_STEP, LOW);
-    delayMicroseconds(MOTOR_DELAY);
-    current_right_length = current_right_length + (1/STEP_DISTANCE);
-  } else if (target_right_length < current_right_length) {
-    digitalWrite(PIN_RIGHT_DIR, LOW); // motor direction ccw
-    digitalWrite(PIN_RIGHT_STEP, HIGH);
-    delayMicroseconds(MOTOR_DELAY);
-    digitalWrite(PIN_RIGHT_STEP, LOW);
-    delayMicroseconds(MOTOR_DELAY);
-    current_right_length = current_right_length - (1/STEP_DISTANCE);
-  }
+  if ((target_left_length < (sqrt(CANVAS_WIDHT*CANVAS_WIDHT+CANVAS_HEIGHT*CANVAS_HEIGHT)+LEFT_STANDARD_LENGTH)) and (target_right_length < (sqrt(CANVAS_WIDHT*CANVAS_WIDHT+CANVAS_HEIGHT*CANVAS_HEIGHT)+RIGHT_STANDARD_LENGTH))){ // Check if coordinates
+
+    // Set motor directions:
+    // Movement for left motor (cw means decreasing length of tooth belt):
+    if (target_left_length < current_left_length) {
+      digitalWrite(PIN_LEFT_DIR, HIGH); // motor direction cw
+      left_addition_factor = -1;
+    } else {
+      digitalWrite(PIN_LEFT_DIR, LOW); // motor direction ccw
+      left_addition_factor = 1;
     }
-  delayMicroseconds(MOTOR_DELAY);
-  Serial.println("Status (R;L):");
-  Serial.println(String(target_right_length));
-  Serial.println(String(current_right_length));
-  Serial.println(String(target_left_length));
-  Serial.println(String(current_left_length));
-}
-Serial.println("Moved to desired location!");
-}
+    // Movement for right motor (cw means increasing length of tooth belt):
+    if (target_right_length < current_right_length) {
+      digitalWrite(PIN_RIGHT_DIR, LOW); // motor direction ccw
+      right_addition_factor = -1;
+    } else{
+      digitalWrite(PIN_RIGHT_DIR, HIGH); // motor direction cw 
+      right_addition_factor = 1;
+    }
+
+    // Spin motors the right amount of time:
+    
+    while (!((int(target_left_length) == int(current_left_length)) && (int(target_right_length) == int(current_right_length)))){
+      if (int(target_left_length) != int(current_left_length)){
+        digitalWrite(PIN_LEFT_STEP, HIGH);
+        delayMicroseconds(MOTOR_DELAY);
+        digitalWrite(PIN_LEFT_STEP, LOW);
+        delayMicroseconds(MOTOR_DELAY);
+        current_left_length++; //= current_left_length + left_addition_factor * (1/STEP_DISTANCE);
+      }
+      if (int(target_right_length) != int(current_right_length)){
+        digitalWrite(PIN_LEFT_STEP, HIGH);
+        delayMicroseconds(MOTOR_DELAY);
+        digitalWrite(PIN_LEFT_STEP, LOW);
+        delayMicroseconds(MOTOR_DELAY);
+        current_right_length++; //= current_right_length + right_addition_factor * (1/STEP_DISTANCE);
+      }
+    Serial.println("Status (R;L):");
+    Serial.println(String(target_right_length));
+    Serial.println(String(current_right_length));
+    Serial.println(String(target_left_length));
+    Serial.println(String(current_left_length));
+  }
+  Serial.println("Moved to desired location!");
+  }
 }
 
 void move_to_origin() {
@@ -98,6 +101,13 @@ void setup() {
 
 
 void loop() {
+  Serial.println("moving pen");
+  lift_pen();
+  delay(2000);
+  lower_pen();
+  delay(2000);
+  // Moving means calculating the belt lengths to reach; then determining the speed / delay of each motor; then spin motors
+  // Speed of motors differ because they have to finish the move at the same time -> Create a line 
   calculate_belt_lengths(100,  100);
   move_to();
   delay(2000);
