@@ -19,8 +19,8 @@ const int SERVO_ANGLE_PEN_DOWN = 90;
 const int STEP_DISTANCE = 108;
 
 // Speed (v_max for plotting process); In my case: 15 mm/s to 25 mm/s is pretty good
-const float SPEED = 20; // Measured in mm/s
-const float STEPS_PER_SECOND = SPEED * STEP_DISTANCE;
+const float V_MAX = 20; // Measured in mm/s
+const float STEPS_PER_SECOND = V_MAX * STEP_DISTANCE;
 // Delay between two motor movements should be >35 for sixteenth step mode; >950 for full step mode
 
 // Scale factor to scale given coordinates:
